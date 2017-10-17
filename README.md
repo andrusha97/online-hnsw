@@ -10,7 +10,7 @@ This project also includes:
 * A copy of
 [the hopscotch-map project](https://github.com/Tessil/hopscotch-map), which is licensed under the MIT license.
 It resides in `include/hnsw/containers/hopscotch-map-1.4.0`.
-* Parts of [nmslib](https://github.com/searchivarius/nmslib) which are also licensed under the Apache 2.0 license.
+* Parts of [nmslib](https://github.com/searchivarius/nmslib), which are also licensed under the Apache 2.0 license.
 
 Individual source files have corresponding copyright and license info.
 
