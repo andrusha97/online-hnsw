@@ -353,7 +353,7 @@ private:
         // I avoid use of uniform_real_distribution to control how many times random() is called.
         // This makes inserts reproducible across standard libraries.
 
-        // NOTE: This works fine for standard random engines because their value_type is required to be unsigned.
+        // NOTE: This works correctly for standard random engines because their value_type is required to be unsigned.
         auto sample = random() - random_t::min();
         auto max_rand = random_t::max() - random_t::min();
 
