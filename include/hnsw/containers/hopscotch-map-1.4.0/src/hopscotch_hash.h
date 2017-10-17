@@ -63,7 +63,7 @@
     #endif
 #endif
 
-namespace hnsw { namespace detail { namespace tsl {
+namespace hnsw { namespace tsl {
 
 /**
  * Grow the map by a factor of two keeping bucket_count to a power of two. It allows
@@ -1859,4 +1859,4 @@ private:
 } // end namespace detail_hopscotch_hash
 
 
-}}} // end namespace hnsw::detail::tsl
+}} // end namespace hnsw::tsl

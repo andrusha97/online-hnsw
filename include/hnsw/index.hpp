@@ -1,10 +1,10 @@
 #pragma once
 
+#include "containers/flat_map.hpp"
+#include "containers/hopscotch-map-1.4.0/src/hopscotch_map.h"
+#include "containers/hopscotch-map-1.4.0/src/hopscotch_set.h"
+#include "containers/small_set.hpp"
 #include "detail/detail.hpp"
-#include "detail/flat_map.hpp"
-#include "detail/hopscotch-map-1.4.0/src/hopscotch_map.h"
-#include "detail/hopscotch-map-1.4.0/src/hopscotch_set.h"
-#include "detail/small_set.hpp"
 #include "prefetch.hpp"
 #include "options.hpp"
 
@@ -59,8 +59,8 @@ struct hnsw_index {
     };
 
     struct node_t {
-        using outgoing_links_t = detail::flat_map<key_t, scalar_t>;
-        using incoming_links_t = detail::small_set<key_t>;
+        using outgoing_links_t = flat_map<key_t, scalar_t>;
+        using incoming_links_t = small_set<key_t>;
 
         struct layer_t {
             outgoing_links_t outgoing;
@@ -76,10 +76,10 @@ struct hnsw_index {
     distance_t distance;
     random_t random;
 
-    detail::tsl::hopscotch_map<key_t, node_t> nodes;
+    tsl::hopscotch_map<key_t, node_t> nodes;
 
     // For levels order of keys is important, so it's std::map.
-    std::map<size_t, detail::tsl::hopscotch_set<key_t>> levels;
+    std::map<size_t, tsl::hopscotch_set<key_t>> levels;
 
 private:
     using closest_queue_t = std::priority_queue<
@@ -359,7 +359,7 @@ private:
                       const std::vector<key_t> &start_from,
                       furthest_queue_t &results) const
     {
-        detail::tsl::hopscotch_set<key_t> visited_nodes;
+        tsl::hopscotch_set<key_t> visited_nodes;
         visited_nodes.reserve(5 * max_links(layer) * results_number);
         visited_nodes.insert(start_from.begin(), start_from.end());
 

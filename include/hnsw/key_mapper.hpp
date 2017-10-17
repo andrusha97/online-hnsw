@@ -2,7 +2,7 @@
 
 #include "index.hpp"
 
-#include "detail/hopscotch-map-1.4.0/src/hopscotch_map.h"
+#include "containers/hopscotch-map-1.4.0/src/hopscotch_map.h"
 #include "detail/undef_hopscotch_macros.hpp"
 
 #include <limits>
@@ -32,8 +32,8 @@ public:
 
     random_t random;
     index_t index;
-    detail::tsl::hopscotch_map<key_t, internal_key_t> key_to_internal;
-    detail::tsl::hopscotch_map<internal_key_t, key_t> internal_to_key;
+    tsl::hopscotch_map<key_t, internal_key_t> key_to_internal;
+    tsl::hopscotch_map<internal_key_t, key_t> internal_to_key;
 
 public:
     void insert(const key_t &key, const vector_t &vector) {

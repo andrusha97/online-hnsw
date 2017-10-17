@@ -6,7 +6,7 @@
 #include <vector>
 
 
-namespace hnsw { namespace detail {
+namespace hnsw {
 
 
 template<class T>
@@ -139,4 +139,4 @@ private:
 };
 
 
-}}
+}

@@ -35,7 +35,7 @@
 #include "hopscotch_hash.h"
 
 
-namespace hnsw { namespace detail { namespace tsl {
+namespace hnsw { namespace tsl {
 
 /**
  * Implementation of a hash map using the hopscotch hashing algorithm.
@@ -660,4 +660,4 @@ private:
     ht m_ht;
 };
 
-}}} // end namespace hnsw::detail::tsl
+}} // end namespace hnsw::tsl
