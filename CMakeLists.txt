@@ -7,7 +7,7 @@ OPTION(ENABLE_TESTS "Enable tests" ON)
 FIND_PACKAGE(Threads REQUIRED)
 
 SET(Boost_USE_MULTITHREADED ON)
-FIND_PACKAGE(Boost 1.56.0 REQUIRED COMPONENTS date_time system program_options regex)
+FIND_PACKAGE(Boost 1.53.0 REQUIRED COMPONENTS date_time system program_options regex)
 
 
 ADD_SUBDIRECTORY(benchmarks)
