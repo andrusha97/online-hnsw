@@ -37,6 +37,50 @@ void measure_search_speed(const index_t &index, const dataset_t &control, size_t
 }
 
 
+void do_test(uint32_t seed, std::string input_file, boost::optional<size_t> control_size, size_t threads) {
+    random_t random(seed);
+    auto dataset = read_vectors(input_file);
+    normalize(dataset);
+    shuffle(dataset, random);
+
+    dataset_t control;
+    split_dataset(dataset, control, get_control_size(dataset, control_size));
+
+    LOG << "Building the index...";
+
+    index_t index;
+
+    for (const auto &x: dataset) {
+        index.insert(x.first, x.second);
+
+        if (index.index.nodes.size() % 10000 == 0) {
+            LOG << "Inserted " << index.index.nodes.size() << " vectors.";
+        }
+    }
+
+    LOG << "Done. Index contains " << index.index.nodes.size() << " elements.";
+
+    assess_index(index, dataset, control, threads);
+
+    LOG << "Measuring search performance...";
+    measure_search_speed(index, control, threads);
+
+    shuffle(dataset, random);
+
+    LOG << "Removing items. Index contains " << index.index.nodes.size() << " elements.";
+
+    for (const auto &x: dataset) {
+        index.remove(x.first);
+
+        if (index.index.nodes.size() % 10000 == 0) {
+            LOG << index.index.nodes.size() << " vectors are left.";
+        }
+    }
+
+    LOG << "Done.";
+}
+
+
 int main(int argc, const char *argv[]) {
     namespace po = boost::program_options;
 
@@ -86,46 +130,8 @@ int main(int argc, const char *argv[]) {
         return 1;
     }
 
-    random_t random(seed);
-    auto dataset = read_vectors(input_file);
-    normalize(dataset);
-    shuffle(dataset, random);
 
-    dataset_t control;
-    split_dataset(dataset, control, get_control_size(dataset, control_size));
-
-    LOG << "Building the index...";
-
-    index_t index;
-
-    for (const auto &x: dataset) {
-        index.insert(x.first, x.second);
-
-        if (index.index.nodes.size() % 10000 == 0) {
-            LOG << "Inserted " << index.index.nodes.size() << " vectors.";
-        }
-    }
-
-    LOG << "Done. Index contains " << index.index.nodes.size() << " elements.";
-
-    assess_index(index, dataset, control, threads);
-
-    LOG << "Measuring search performance...";
-    measure_search_speed(index, control, threads);
-
-    shuffle(dataset, random);
-
-    LOG << "Removing items. Index contains " << index.index.nodes.size() << " elements.";
-
-    for (const auto &x: dataset) {
-        index.remove(x.first);
-
-        if (index.index.nodes.size() % 10000 == 0) {
-            LOG << index.index.nodes.size() << " vectors are left.";
-        }
-    }
-
-    LOG << "Done.";
+    do_test(seed, input_file, control_size, threads);
 
     return 0;
 }

@@ -6,6 +6,27 @@
 #include <boost/program_options.hpp>
 
 
+void do_test(std::string input_file) {
+    vectors_reader_t reader(input_file);
+
+    LOG << "Building the index...";
+
+    index_t index;
+
+    std::pair<std::string, vector_t> item;
+    while (reader.read(item.first, item.second)) {
+        index.insert(item.first, item.second);
+
+        if (index.index.nodes.size() % 10000 == 0) {
+            LOG << "Inserted " << index.index.nodes.size() << " vectors.";
+        }
+    }
+
+    LOG << "Done. Index contains " << index.index.nodes.size() << " elements.";
+    LOG << "RSS: " << getCurrentRSS();
+}
+
+
 int main(int argc, const char *argv[]) {
     namespace po = boost::program_options;
 
@@ -37,23 +58,8 @@ int main(int argc, const char *argv[]) {
         return 1;
     }
 
-    vectors_reader_t reader(input_file);
 
-    LOG << "Building the index...";
-
-    index_t index;
-
-    std::pair<std::string, vector_t> item;
-    while (reader.read(item.first, item.second)) {
-        index.insert(item.first, item.second);
-
-        if (index.index.nodes.size() % 10000 == 0) {
-            LOG << "Inserted " << index.index.nodes.size() << " vectors.";
-        }
-    }
-
-    LOG << "Done. Index contains " << index.index.nodes.size() << " elements.";
-    LOG << "RSS: " << getCurrentRSS();
+    do_test(input_file);
 
     return 0;
 }
