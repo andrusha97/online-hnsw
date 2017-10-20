@@ -11,7 +11,7 @@ void do_test(index_t &index, std::string input_file) {
 
     LOG << "Building the index...";
 
-    std::vector<std::pair<std::string, vector_t>> item;
+    std::vector<std::pair<std::string, vector_t>> item(1);
     while (reader.read(item.front().first, item.front().second)) {
         index.prepare_dataset(item);
         index.insert(item.front().first, item.front().second);
@@ -22,6 +22,7 @@ void do_test(index_t &index, std::string input_file) {
     }
 
     LOG << "Done. Index contains " << index.size() << " elements.";
+    LOG << "Estimated memory footprint: " << index.memory_footprint();
     LOG << "RSS: " << getCurrentRSS();
 }
 

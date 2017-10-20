@@ -65,6 +65,7 @@ struct index_t {
     virtual std::vector<std::pair<std::string, float>> search(const vector_t &target, size_t neighbors) const = 0;
     virtual bool check() const = 0;
     virtual size_t size() const = 0;
+    virtual size_t memory_footprint() const = 0;
 
     virtual void prepare_dataset(dataset_t &dataset) const = 0;
 };
@@ -107,6 +108,40 @@ struct hnsw_index : index_t {
         if (NormalizeDataset) {
             normalize(dataset);
         }
+    }
+
+    size_t memory_footprint() const override {
+        size_t footprint = 0;
+
+        for (const auto &x: wrapped.index.levels) {
+            footprint += sizeof(x);
+            footprint += sizeof(*x.second.begin()) * x.second.bucket_count();
+        }
+
+        footprint += sizeof(*wrapped.index.nodes.begin()) * wrapped.index.nodes.bucket_count();
+
+        for (const auto &x: wrapped.index.nodes) {
+            footprint += sizeof(*x.second.vector.begin()) * x.second.vector.capacity();
+            footprint += sizeof(*x.second.layers.begin()) * x.second.layers.capacity();
+
+            for (const auto &layer: x.second.layers) {
+                footprint += sizeof(*layer.incoming.begin()) * layer.incoming.capacity();
+                footprint += sizeof(*layer.outgoing.begin()) * layer.outgoing.capacity();
+            }
+        }
+
+        footprint += sizeof(*wrapped.key_to_internal.begin()) * wrapped.key_to_internal.bucket_count();
+        footprint += sizeof(*wrapped.internal_to_key.begin()) * wrapped.internal_to_key.bucket_count();
+
+        for (const auto &x: wrapped.key_to_internal) {
+            footprint += x.first.capacity();
+        }
+
+        for (const auto &x: wrapped.internal_to_key) {
+            footprint += x.second.capacity();
+        }
+
+        return footprint;
     }
 };
 

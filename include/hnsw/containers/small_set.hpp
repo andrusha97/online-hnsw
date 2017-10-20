@@ -92,6 +92,10 @@ public:
         return m_values.size();
     }
 
+    size_type capacity() const {
+        return m_values.capacity();
+    }
+
     size_type count(const value_type &v) const {
         return std::count(m_values.begin(), m_values.end(), v);
     }

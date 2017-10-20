@@ -113,6 +113,10 @@ public:
         return m_values.size();
     }
 
+    size_type capacity() const {
+        return m_values.capacity();
+    }
+
     size_type count(const key_type &k) const {
         auto range = std::equal_range(m_values.begin(), m_values.end(), k, compare_t());
         return range.second - range.first;
