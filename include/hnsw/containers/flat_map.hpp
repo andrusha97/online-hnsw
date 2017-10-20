@@ -149,7 +149,7 @@ public:
     template<class... Args>
     std::pair<iterator, bool> emplace(Args &&... args) {
         return insert(value_type(std::forward<Args>(args)...));
-    };
+    }
 
     size_type erase(const key_type &k) {
         auto range = std::equal_range(m_values.begin(), m_values.end(), k, compare_t());

@@ -119,7 +119,7 @@ public:
     template<class... Args>
     std::pair<iterator, bool> emplace(Args &&... args) {
         return insert(value_type(std::forward<Args>(args)...));
-    };
+    }
 
     size_type erase(const value_type &v) {
         if (m_values.empty()) {
