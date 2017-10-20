@@ -1,0 +1,12 @@
+SET(COMPILE_FLAGS -std=c++14 -pedantic -pedantic-errors -Wall -Wextra -Werror)
+
+
+ADD_EXECUTABLE(cpu_perf
+    cpu_perf.cpp
+    log.cpp
+)
+
+TARGET_INCLUDE_DIRECTORIES(cpu_perf BEFORE PRIVATE ${PROJECT_SOURCE_DIR}/include)
+TARGET_INCLUDE_DIRECTORIES(cpu_perf SYSTEM PRIVATE ${Boost_INCLUDE_DIRS})
+TARGET_LINK_LIBRARIES(cpu_perf ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+TARGET_COMPILE_OPTIONS(cpu_perf PRIVATE ${COMPILE_FLAGS})

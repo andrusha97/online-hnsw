@@ -4,6 +4,15 @@ PROJECT(HNSW)
 OPTION(ENABLE_TESTS "Enable tests" ON)
 
 
+FIND_PACKAGE(Threads REQUIRED)
+
+SET(Boost_USE_MULTITHREADED ON)
+FIND_PACKAGE(Boost 1.56.0 REQUIRED COMPONENTS date_time system program_options regex)
+
+
+ADD_SUBDIRECTORY(benchmarks)
+
+
 IF(ENABLE_TESTS)
     ENABLE_TESTING()
     ADD_SUBDIRECTORY(tests)
