@@ -222,6 +222,12 @@ public:
         }
 
         nodes.erase(node_it);
+
+        // Shrink the hash table when it becomes too sparse
+        // (to reduce memory usage and ensure linear complexity for iteration).
+        if (4 * nodes.load_factor() < nodes.max_load_factor()) {
+            nodes.rehash(size_t(2 * nodes.size() / nodes.max_load_factor()));
+        }
     }
 
 

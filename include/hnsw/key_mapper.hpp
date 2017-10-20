@@ -76,6 +76,16 @@ public:
         index.remove(key_it->second);
         internal_to_key.erase(key_it->second);
         key_to_internal.erase(key_it);
+
+        // Shrink hash tables when they become too sparse
+        // (to reduce memory usage and ensure linear complexity for iteration).
+        if (4 * internal_to_key.load_factor() < internal_to_key.max_load_factor()) {
+            internal_to_key.rehash(size_t(2 * internal_to_key.size() / internal_to_key.max_load_factor()));
+        }
+
+        if (4 * key_to_internal.load_factor() < key_to_internal.max_load_factor()) {
+            key_to_internal.rehash(size_t(2 * key_to_internal.size() / key_to_internal.max_load_factor()));
+        }
     }
 
     std::vector<search_result_t> search(const vector_t &target, std::size_t nearest_neighbors) const {
