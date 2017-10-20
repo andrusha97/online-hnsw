@@ -2,16 +2,12 @@
 #include "evaluate.hpp"
 #include "input.hpp"
 
-#include <hnsw/distance.hpp>
-#include <hnsw/index.hpp>
-
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
 #include <atomic>
 #include <chrono>
 #include <iostream>
-#include <random>
 #include <thread>
 #include <vector>
 
