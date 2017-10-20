@@ -83,14 +83,14 @@ int main(int argc, const char *argv[]) {
     namespace po = boost::program_options;
 
     std::string index_type = "dot_product";
-    boost::optional<size_t> max_links;
-    boost::optional<size_t> ef_construction;
-    boost::optional<std::string> insert_method;
-    boost::optional<std::string> remove_method;
+    boost::optional<size_t> max_links = boost::make_optional(false, size_t());
+    boost::optional<size_t> ef_construction = boost::make_optional(false, size_t());
+    boost::optional<std::string> insert_method = boost::make_optional(false, std::string());
+    boost::optional<std::string> remove_method = boost::make_optional(false, std::string());
 
     uint32_t seed = 0;
     std::string input_file;
-    boost::optional<size_t> control_size;
+    boost::optional<size_t> control_size = boost::make_optional(false, size_t());
     size_t threads = std::thread::hardware_concurrency();
 
     po::options_description description("Available options");
