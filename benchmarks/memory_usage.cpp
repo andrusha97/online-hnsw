@@ -11,9 +11,10 @@ void do_test(index_t &index, std::string input_file) {
 
     LOG << "Building the index...";
 
-    std::pair<std::string, vector_t> item;
-    while (reader.read(item.first, item.second)) {
-        index.insert(item.first, item.second);
+    std::vector<std::pair<std::string, vector_t>> item;
+    while (reader.read(item.front().first, item.front().second)) {
+        index.prepare_dataset(item);
+        index.insert(item.front().first, item.front().second);
 
         if (index.size() % 10000 == 0) {
             LOG << "Inserted " << index.size() << " vectors.";
