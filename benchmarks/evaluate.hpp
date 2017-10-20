@@ -87,7 +87,7 @@ inline void assess_index(const index_t &index, const dataset_t &vectors, const d
         auto neighbor = index.search(item.second, 1);
         const auto &ref_neighbors = reference.at(item.first);
 
-        if (!neighbor.empty() && neighbor.front().key == ref_neighbors.front()) {
+        if (!neighbor.empty() && neighbor.front().first == ref_neighbors.front()) {
             ++rank1;
         }
 
@@ -95,7 +95,7 @@ inline void assess_index(const index_t &index, const dataset_t &vectors, const d
         std::vector<std::string> neighbors10_keys;
 
         for (const auto &n: neighbors10) {
-            neighbors10_keys.push_back(n.key);
+            neighbors10_keys.push_back(n.first);
         }
 
         rank10 += intersection_size(ref_neighbors.begin(),

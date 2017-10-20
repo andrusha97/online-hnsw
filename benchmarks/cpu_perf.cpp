@@ -37,28 +37,26 @@ void measure_search_speed(const index_t &index, const dataset_t &control, size_t
 }
 
 
-void do_test(uint32_t seed, std::string input_file, boost::optional<size_t> control_size, size_t threads) {
+void do_test(index_t &index, uint32_t seed, std::string input_file, boost::optional<size_t> control_size, size_t threads) {
     random_t random(seed);
     auto dataset = read_vectors(input_file);
-    normalize(dataset);
     shuffle(dataset, random);
+    index.prepare_dataset(dataset);
 
     dataset_t control;
     split_dataset(dataset, control, get_control_size(dataset, control_size));
 
     LOG << "Building the index...";
 
-    index_t index;
-
     for (const auto &x: dataset) {
         index.insert(x.first, x.second);
 
-        if (index.index.nodes.size() % 10000 == 0) {
-            LOG << "Inserted " << index.index.nodes.size() << " vectors.";
+        if (index.size() % 10000 == 0) {
+            LOG << "Inserted " << index.size() << " vectors.";
         }
     }
 
-    LOG << "Done. Index contains " << index.index.nodes.size() << " elements.";
+    LOG << "Done. Index contains " << index.size() << " elements.";
 
     assess_index(index, dataset, control, threads);
 
@@ -67,13 +65,13 @@ void do_test(uint32_t seed, std::string input_file, boost::optional<size_t> cont
 
     shuffle(dataset, random);
 
-    LOG << "Removing items. Index contains " << index.index.nodes.size() << " elements.";
+    LOG << "Removing items. Index contains " << index.size() << " elements.";
 
     for (const auto &x: dataset) {
         index.remove(x.first);
 
-        if (index.index.nodes.size() % 10000 == 0) {
-            LOG << index.index.nodes.size() << " vectors are left.";
+        if (index.size() % 10000 == 0) {
+            LOG << index.size() << " vectors are left.";
         }
     }
 
@@ -84,6 +82,12 @@ void do_test(uint32_t seed, std::string input_file, boost::optional<size_t> cont
 int main(int argc, const char *argv[]) {
     namespace po = boost::program_options;
 
+    std::string index_type = "dot_product";
+    boost::optional<size_t> max_links;
+    boost::optional<size_t> ef_construction;
+    boost::optional<std::string> insert_method;
+    boost::optional<std::string> remove_method;
+
     uint32_t seed = 0;
     std::string input_file;
     boost::optional<size_t> control_size;
@@ -92,6 +96,11 @@ int main(int argc, const char *argv[]) {
     po::options_description description("Available options");
     description.add_options()
         ("help,h", "print help message")
+        ("index-type", po::value<std::string>(), "type of index (supported options: dot_product, cosine)")
+        ("max-links", po::value<size_t>(), "index_options_t::max_links")
+        ("ef-construction", po::value<size_t>(), "index_options_t::ef_construction")
+        ("insert-method", po::value<std::string>(), "index_options_t::insert_method")
+        ("remove-method", po::value<std::string>(), "index_options_t::remove_method")
         ("seed", po::value<uint32_t>(), "seed for the random numbers generator")
         ("threads", po::value<size_t>(), "how many threads to use")
         ("input-file", po::value<std::string>(), "file with vectors")
@@ -105,6 +114,26 @@ int main(int argc, const char *argv[]) {
         if (vm.count("help") > 0) {
             std::cout << description << std::endl;
             return 0;
+        }
+
+        if (vm.count("index-type") > 0) {
+            index_type = vm["index-type"].as<std::string>();
+        }
+
+        if (vm.count("max-links") > 0) {
+            max_links = vm["max-links"].as<size_t>();
+        }
+
+        if (vm.count("ef-construction") > 0) {
+            ef_construction = vm["ef-construction"].as<size_t>();
+        }
+
+        if (vm.count("insert-method") > 0) {
+            insert_method = vm["insert-method"].as<std::string>();
+        }
+
+        if (vm.count("remove-method") > 0) {
+            remove_method = vm["remove-method"].as<std::string>();
         }
 
         if (vm.count("seed") > 0) {
@@ -131,7 +160,13 @@ int main(int argc, const char *argv[]) {
     }
 
 
-    do_test(seed, input_file, control_size, threads);
+    do_test(
+        *make_index(index_type, max_links, ef_construction, insert_method, remove_method),
+        seed,
+        input_file,
+        control_size,
+        threads
+    );
 
     return 0;
 }
