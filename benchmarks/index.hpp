@@ -343,6 +343,11 @@ make_index(std::string type,
         auto index = std::make_unique<hnsw_index<hnsw_index_t, false>>();
         index->wrapped.index.options = options;
         return std::unique_ptr<index_t>(std::move(index));
+    } else if (type == "l2sqr") {
+        using hnsw_index_t = hnsw::key_mapper<std::string, hnsw::hnsw_index<uint32_t, vector_t, hnsw::l2_square_distance_t>>;
+        auto index = std::make_unique<hnsw_index<hnsw_index_t, false>>();
+        index->wrapped.index.options = options;
+        return std::unique_ptr<index_t>(std::move(index));
     } else {
         throw std::runtime_error("make_index: unknown index type: " + type);
     }
