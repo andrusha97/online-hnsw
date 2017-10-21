@@ -18,6 +18,7 @@
 #include "index.hpp"
 
 #include "containers/hopscotch-map-1.4.0/src/hopscotch_map.h"
+
 #include "detail/undef_hopscotch_macros.hpp"
 
 #include <limits>
