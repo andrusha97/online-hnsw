@@ -25,6 +25,7 @@ void do_test(index_t &index, std::string input_file) {
     LOG << "Used memory: " << index.used_memory();
     LOG << "Memory breakdown: " << index.used_memory_info();
     LOG << "Estimated memory footprint: " << index.memory_footprint();
+    LOG << "Footprint breakdown: " << index.memory_footprint_info();
     LOG << "RSS: " << getCurrentRSS();
 }
 

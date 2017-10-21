@@ -23,6 +23,7 @@ struct index_t {
     virtual bool check() const = 0;
     virtual size_t size() const = 0;
     virtual size_t memory_footprint() const = 0;
+    virtual std::string memory_footprint_info() const = 0;
     virtual size_t used_memory() const = 0;
     virtual std::string used_memory_info() const = 0;
 
@@ -135,6 +136,86 @@ struct hnsw_index : index_t {
         }
 
         return footprint;
+    }
+
+    std::string memory_footprint_info() const override {
+        std::string result;
+
+        {
+            size_t levels_footprint = 0;
+
+            for (const auto &x: wrapped.index.levels) {
+                levels_footprint += sizeof(x);
+                levels_footprint += sizeof(*x.second.begin()) * x.second.bucket_count();
+            }
+
+            result += "levels: " + std::to_string(levels_footprint) + "; ";
+        }
+
+        result += "nodes table: " + std::to_string(sizeof(*wrapped.index.nodes.begin()) * wrapped.index.nodes.bucket_count()) + "; ";
+
+        {
+            size_t vectors_footprint = 0;
+
+            for (const auto &x: wrapped.index.nodes) {
+                vectors_footprint += sizeof(*x.second.vector.begin()) * x.second.vector.capacity();
+            }
+
+            result += "vectors: " + std::to_string(vectors_footprint) + "; ";
+        }
+
+        {
+            size_t layers_vectors_footprint = 0;
+
+            for (const auto &x: wrapped.index.nodes) {
+                layers_vectors_footprint += sizeof(*x.second.layers.begin()) * x.second.layers.capacity();
+            }
+
+            result += "layers vectors: " + std::to_string(layers_vectors_footprint) + "; ";
+        }
+
+        {
+            size_t incoming_links_footprint = 0;
+
+            for (const auto &x: wrapped.index.nodes) {
+                for (const auto &layer: x.second.layers) {
+                    incoming_links_footprint += sizeof(*layer.incoming.begin()) * layer.incoming.capacity();
+                }
+            }
+
+            result += "incoming links: " + std::to_string(incoming_links_footprint) + "; ";
+        }
+
+        {
+            size_t outgoing_links_footprint = 0;
+
+            for (const auto &x: wrapped.index.nodes) {
+                for (const auto &layer: x.second.layers) {
+                    outgoing_links_footprint += sizeof(*layer.outgoing.begin()) * layer.outgoing.capacity();
+                }
+            }
+
+            result += "outgoing links: " + std::to_string(outgoing_links_footprint) + "; ";
+        }
+
+        result += "key_to_internal: " + std::to_string(sizeof(*wrapped.key_to_internal.begin()) * wrapped.key_to_internal.bucket_count()) + "; ";
+        result += "internal_to_key: " + std::to_string(sizeof(*wrapped.internal_to_key.begin()) * wrapped.internal_to_key.bucket_count()) + "; ";
+
+        {
+            size_t keys_footprint = 0;
+
+            for (const auto &x: wrapped.key_to_internal) {
+                keys_footprint += x.first.capacity();
+            }
+
+            for (const auto &x: wrapped.internal_to_key) {
+                keys_footprint += x.second.capacity();
+            }
+
+            result += "keys: " + std::to_string(keys_footprint) + "; ";
+        }
+
+        return result;
     }
 
     std::string used_memory_info() const override {
