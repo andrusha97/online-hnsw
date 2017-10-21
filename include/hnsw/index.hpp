@@ -388,7 +388,7 @@ private:
         visited_nodes.reserve(5 * max_links(layer) * results_number);
         visited_nodes.insert(start_from.begin(), start_from.end());
 
-        closest_queue_t search_front;
+        detail::priority_queue<closest_queue_t> search_front;
 
         for (const auto &key: start_from) {
             auto d = distance(target, nodes.at(key).vector);
@@ -398,7 +398,6 @@ private:
 
         while (results.size() > results_number) {
             results.pop();
-            search_front.pop();
         }
 
         for (size_t hop = 0; !search_front.empty() && search_front.top().second <= results.top().second && hop < nodes.size(); ++hop) {
@@ -426,6 +425,11 @@ private:
                         search_front.push({link.first, d});
                     }
                 }
+            }
+
+            // Try to make search_front smaller, so to speed up operations on it.
+            while (!search_front.empty() && search_front.c.back().second > results.top().second) {
+                search_front.c.pop_back();
             }
         }
     }
