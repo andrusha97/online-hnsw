@@ -1,5 +1,5 @@
-#include "common.hpp"
 #include "evaluate.hpp"
+#include "index.hpp"
 #include "input.hpp"
 
 #include <boost/optional.hpp>

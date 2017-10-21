@@ -1,4 +1,4 @@
-#include "common.hpp"
+#include "index.hpp"
 #include "input.hpp"
 
 #include <getRSS.h>
@@ -22,6 +22,7 @@ void do_test(index_t &index, std::string input_file) {
     }
 
     LOG << "Done. Index contains " << index.size() << " elements.";
+    LOG << "Used memory: " << index.used_memory();
     LOG << "Estimated memory footprint: " << index.memory_footprint();
     LOG << "RSS: " << getCurrentRSS();
 }
