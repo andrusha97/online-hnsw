@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <limits>
 
 #define HNSW_HAVE_SSE2

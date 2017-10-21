@@ -22,6 +22,8 @@
 
 #ifdef __AVX__
 
+#include <cstddef>
+
 #define HNSW_HAVE_AVX
 
 namespace hnsw { namespace detail {
