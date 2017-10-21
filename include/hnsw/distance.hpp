@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "detail/cosine.hpp"
 #include "detail/dot_product.hpp"
 
 #include <algorithm>
@@ -34,11 +35,9 @@ struct cosine_distance_t {
 
         using result_type = decltype(*one.data());
 
-        result_type product = detail::dot_product(one.data(), another.data(), one.size())
-                            / std::sqrt(detail::dot_product(one.data(), one.data(), one.size()))
-                            / std::sqrt(detail::dot_product(another.data(), another.data(), one.size()));
+        result_type cosine = detail::cosine(one.data(), another.data(), one.size());
 
-        return std::max(result_type(0), result_type(result_type(1.0) - product));
+        return std::max(result_type(0), result_type(result_type(1.0) - cosine));
     }
 };
 
