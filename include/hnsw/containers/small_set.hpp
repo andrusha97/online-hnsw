@@ -112,6 +112,10 @@ public:
             return {it, false};
         }
 
+        if (m_values.capacity() == m_values.size()) {
+            m_values.reserve(m_values.size() + 1);
+        }
+
         m_values.push_back(std::move(new_value));
         return {m_values.begin() + m_values.size() - 1, true};
     }
