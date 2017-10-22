@@ -44,11 +44,11 @@ int main(int argc, const char *argv[]) {
     po::options_description description("Available options");
     description.add_options()
         ("help,h", "print help message")
-        ("index_type", po::value<std::string>(), "type of index (supported options: dot_product, cosine)")
-        ("max_links", po::value<size_t>(), "index_options_t::max_links")
-        ("ef_construction", po::value<size_t>(), "index_options_t::ef_construction")
-        ("insert_method", po::value<std::string>(), "index_options_t::insert_method")
-        ("remove_method", po::value<std::string>(), "index_options_t::remove_method")
+        ("index-type", po::value<std::string>(), "type of index (supported options: dot_product, cosine)")
+        ("max-links", po::value<size_t>(), "index_options_t::max_links")
+        ("ef-construction", po::value<size_t>(), "index_options_t::ef_construction")
+        ("insert-method", po::value<std::string>(), "index_options_t::insert_method")
+        ("remove-method", po::value<std::string>(), "index_options_t::remove_method")
         ("input-file", po::value<std::string>(), "file with vectors");
 
     try {
