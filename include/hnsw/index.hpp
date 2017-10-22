@@ -128,7 +128,6 @@ public:
 
         for (size_t layer = 0; layer < node_level; ++layer) {
             node_it.value().layers[layer].outgoing.reserve(max_links(layer));
-            node_it.value().layers[layer].incoming.reserve(max_links(layer));
         }
 
         if (nodes.size() == 1) {
