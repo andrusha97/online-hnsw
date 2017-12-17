@@ -37,13 +37,13 @@ T l2sqr_dist(const T *one, const T *another, std::size_t size) {
 
 #if defined(HNSW_HAVE_AVX)
 
-float l2sqr_dist(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float l2sqr_dist(const float *pVect1, const float *pVect2, std::size_t qty) {
     return l2sqr_dist_avx(pVect1, pVect2, qty);
 }
 
 #elif defined(HNSW_HAVE_SSE2)
 
-float l2sqr_dist(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float l2sqr_dist(const float *pVect1, const float *pVect2, std::size_t qty) {
     return l2sqr_dist_sse2(pVect1, pVect2, qty);
 }
 
@@ -52,7 +52,7 @@ float l2sqr_dist(const float *pVect1, const float *pVect2, std::size_t qty) {
 
 #if defined(HNSW_HAVE_SSE2)
 
-double l2sqr_dist(const double *pVect1, const double *pVect2, std::size_t qty) {
+inline double l2sqr_dist(const double *pVect1, const double *pVect2, std::size_t qty) {
     return l2sqr_dist_sse2(pVect1, pVect2, qty);
 }
 

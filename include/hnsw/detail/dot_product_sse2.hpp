@@ -29,7 +29,7 @@
 namespace hnsw { namespace detail {
 
 
-float dot_product_sse2(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float dot_product_sse2(const float *pVect1, const float *pVect2, std::size_t qty) {
     static_assert(sizeof(float) == 4, "Cannot use SIMD instructions with non-32-bit floats.");
 
     std::size_t qty16  = qty/16;
@@ -80,7 +80,7 @@ float dot_product_sse2(const float *pVect1, const float *pVect2, std::size_t qty
 }
 
 
-double dot_product_sse2(const double *pVect1, const double *pVect2, std::size_t qty) {
+inline double dot_product_sse2(const double *pVect1, const double *pVect2, std::size_t qty) {
     static_assert(sizeof(double) == 8, "Cannot use SIMD instructions with non-64-bit doubles.");
 
     std::size_t qty8 = qty/8;

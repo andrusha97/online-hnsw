@@ -51,12 +51,12 @@ T cosine(const T *one, const T *another, std::size_t size) {
 
 #if defined(HNSW_HAVE_SSE2)
 
-float cosine(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float cosine(const float *pVect1, const float *pVect2, std::size_t qty) {
     return cosine_sse2(pVect1, pVect2, qty);
 }
 
 
-double cosine(const double *pVect1, const double *pVect2, std::size_t qty) {
+inline double cosine(const double *pVect1, const double *pVect2, std::size_t qty) {
     return cosine_sse2(pVect1, pVect2, qty);
 }
 

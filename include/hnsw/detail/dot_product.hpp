@@ -36,13 +36,13 @@ T dot_product(const T *one, const T *another, std::size_t size) {
 
 #if defined(HNSW_HAVE_AVX)
 
-float dot_product(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float dot_product(const float *pVect1, const float *pVect2, std::size_t qty) {
     return dot_product_avx(pVect1, pVect2, qty);
 }
 
 #elif defined(HNSW_HAVE_SSE2)
 
-float dot_product(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float dot_product(const float *pVect1, const float *pVect2, std::size_t qty) {
     return dot_product_sse2(pVect1, pVect2, qty);
 }
 
@@ -51,7 +51,7 @@ float dot_product(const float *pVect1, const float *pVect2, std::size_t qty) {
 
 #if defined(HNSW_HAVE_SSE2)
 
-double dot_product(const double *pVect1, const double *pVect2, std::size_t qty) {
+inline double dot_product(const double *pVect1, const double *pVect2, std::size_t qty) {
     return dot_product_sse2(pVect1, pVect2, qty);
 }
 

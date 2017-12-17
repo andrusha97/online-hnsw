@@ -29,7 +29,7 @@
 namespace hnsw { namespace detail {
 
 
-float l2sqr_dist_avx(const float *pVect1, const float *pVect2, std::size_t qty) {
+inline float l2sqr_dist_avx(const float *pVect1, const float *pVect2, std::size_t qty) {
     static_assert(sizeof(float) == 4, "Cannot use SIMD instructions with non-32-bit floats.");
 
     std::size_t qty4  = qty/4;
